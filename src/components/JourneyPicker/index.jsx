@@ -7,14 +7,41 @@ export const JourneyPicker = ({ onJourneyChange }) => {
   const [fromCity, setFromCity] = useState('');
   const [toCity, setToCity] = useState('');
   const [date, setDate] = useState('');
+  const [cities, setCities] = useState([]);
+
+  useEffect(() => {
+    fetch('https://apps.kodim.cz/daweb/leviexpress/api/cities')
+      .then((response) => response.json())
+      .then((data) => setCities(data.results));
+
+    // setCities([
+    //   { name: 'Praha', code: 'CZ-PRG' },
+    //   { name: 'Brno', code: 'CZ-BRQ' },]
+    // )
+  }, [])
+  console.log({ cities })
+
+  const CityOptions = ({ cities }) => {
+    return (
+      <>
+        <option value="">Vyberte</option>
+        {cities.map((city) => (
+          <option value={city.code} key={city.code}>
+            {city.name}
+          </option>
+        ))
+        }
+      </>
+    )
+  }
+  // console.log({ cities })
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // console.log('Odesílám formulář s cestou')
+    console.log('Odesílám formulář s cestou')
     // console.log({ fromCity })
     // console.log({ toCity })
     // console.log({ date })
-
   }
 
   return (
@@ -28,12 +55,7 @@ export const JourneyPicker = ({ onJourneyChange }) => {
               value={fromCity}
               onChange={(event) => setFromCity(event.target.value)}
             >
-              <option value="">Vyberte</option>
-              <option value="mesto01">Město 01</option>
-              <option value="mesto02">Město 02</option>
-              <option value="mesto03">Město 03</option>
-              <option value="mesto04">Město 04</option>
-              <option value="mesto05">Město 05</option>
+              <CityOptions cities={cities} />
             </select>
           </label>
           <label>
@@ -42,12 +64,7 @@ export const JourneyPicker = ({ onJourneyChange }) => {
               value={toCity}
               onChange={(event) => setToCity(event.target.value)}
             >
-              <option value="">Vyberte</option>
-              <option value="mesto01">Město 01</option>
-              <option value="mesto02">Město 02</option>
-              <option value="mesto03">Město 03</option>
-              <option value="mesto04">Město 04</option>
-              <option value="mesto05">Město 05</option>
+              <CityOptions cities={cities} />
             </select>
           </label>
           <label>
